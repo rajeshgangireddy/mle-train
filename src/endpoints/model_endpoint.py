@@ -1,11 +1,9 @@
 import os
 
-import pandas as pd
 from flask import Flask, jsonify, request
 
-from src.data_handler import FeatureEngineer
 from src.models import ModelSelector
-from src.utils import read_config_file
+from src.utils import data_to_features, read_config_file
 
 app = Flask(__name__)
 
@@ -15,10 +13,7 @@ model_save_dir = "demo_space/save_models/"
 
 # Load configuration
 config = read_config_file(config_path)
-
-# Initialize components
-feature_engineer = FeatureEngineer(config=config)
-
+categorical_features = config["feature_engineering"]["categorical_features"]
 # read model _type from model_save_dir
 with open(os.path.join(model_save_dir, "model_type.txt"), "r") as f:
     model_type = f.read().strip()
@@ -39,7 +34,7 @@ def predict():
         data = request.get_json()
 
         # Converts the dictionary to a pandas DataFrame and then to a numpy array
-        x = pd.DataFrame(data).values
+        x = data_to_features(data=data, feature_order=categorical_features)
         predictions = model.predict(x)
 
         # Return predictions as JSON
