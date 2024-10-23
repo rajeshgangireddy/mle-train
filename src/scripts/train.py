@@ -1,25 +1,26 @@
-import os
-import yaml
+import logging
+
 from src.training_pipeline import TrainingPipeline
+from src.utils import read_config_file, setup_logger
 
-def load_config(config_path: str) -> dict:
+logger = logging.getLogger(__name__)
+
+
+def main():
     """
-    Load configuration file from the specified config_path
-    :param config_path: path to the configuration file. Must be in
-        yaml format and with read permissions.
-    :return: dictionary containing the configuration
+    Create and run the training pipeline. For the demo I am using a fixed path config file
+    which has all the parameters required to run the training pipeline. The config file also has fixed directories
+    to read data from and save models to.
+    If not for the demo, ideally, the config file would be made as an optional argument to the main function.
+    :return: None
     """
-    if not config_path.endswith('.yaml'):
-        raise ValueError("Only yaml files are supported")
-
-    if not os.path.exists(config_path):
-        raise FileNotFoundError(f"File not found at: {config_path}")
-
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    return config
-
-if __name__ == "__main__":
-    pipeline_config = load_config("src/configs/config.yaml")
+    setup_logger(level=logging.INFO)
+    demo_config_path = "src/configs/config.yaml"
+    pipeline_config = read_config_file(demo_config_path)
+    logger.info("Creating Training Pipeline from configuration")
     pipeline = TrainingPipeline(pipeline_config)
     pipeline.run()
+
+
+if __name__ == "__main__":
+    main()

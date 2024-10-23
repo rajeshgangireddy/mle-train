@@ -31,12 +31,8 @@ models:
 
 training:
   hyperparameter_optimisation:
-    n_iter: 10                            # Number of iterations for the hyperparameter search
-    search_strategy: "RandomizedSearchCV" # Search strategy for hyperparameter optimization
-    scoring: "roc_auc"                   # Scoring metric for hyperparameter optimization
-    n_jobs: -1
-    cv: 5
+    n_iter: 10                          # Number of iterations for the hyperparameter search
+    scoring: "roc_auc"                  # Scoring metric for hyperparameter optimization
+    n_jobs: 2                           # Number of jobs to run in parallel, -1 means using all processors
+    cv: 8                               # Number of folds in cross-validation
   test_size: 0.2
-
-
-

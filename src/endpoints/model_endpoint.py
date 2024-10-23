@@ -1,18 +1,20 @@
 import os
-from flask import Flask, request, jsonify
-import yaml
+
 import pandas as pd
+from flask import Flask, jsonify, request
+
 from src.data_handler import FeatureEngineer
 from src.models import ModelSelector
+from src.utils import read_config_file
 
 app = Flask(__name__)
 
-config_path="src/configs/config.yaml"
+# For demo, we will use the same configuration file and model save directory
+config_path = "src/configs/config.yaml"
 model_save_dir = "demo_space/save_models/"
 
 # Load configuration
-with open(config_path, 'r') as config_file:
-    config = yaml.safe_load(config_file)
+config = read_config_file(config_path)
 
 # Initialize components
 feature_engineer = FeatureEngineer(config=config)
@@ -25,14 +27,18 @@ model_selector = ModelSelector(model_type=model_type)
 model_loader = model_selector.get_model()
 model = model_loader.load_model(os.path.join(model_save_dir, "model.json"))
 
-@app.route('/predict', methods=['POST'])
+
+@app.route("/predict", methods=["POST"])
 def predict():
+    """
+    Endpoint to make predictions using the model.
+    :return: JSON with predictions or error message
+    """
     try:
         # Get JSON data from request
         data = request.get_json()
 
-        # Make the data into an array -
-        # this is required because the model expects a 2D array
+        # Converts the dictionary to a pandas DataFrame and then to a numpy array
         x = pd.DataFrame(data).values
         predictions = model.predict(x)
 
@@ -42,5 +48,6 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

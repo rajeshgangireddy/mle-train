@@ -12,9 +12,9 @@ pyyaml>=6.0.1
 xgboost>=2.1.0
 flask>= 3.0.2
 requests>=2.30.3
+pytest>=8.2.0
 # Contributors requirements -
 # If required, these can be moved to requirements-dev.txt
-pytest>=8.2.0
 pre-commit>=3.5
 flake8==7.1.*
 black>=24.1

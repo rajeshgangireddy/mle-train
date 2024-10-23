@@ -1,12 +1,20 @@
-from sklearn.model_selection import train_test_split
-from src.data_handler import FeatureEngineer
-from src.models import ModelSelector, HyperparameterTuner, ModelEvaluator
+import logging
 import os
+
+from sklearn.model_selection import train_test_split
+
+from src.data_handler import FeatureEngineer
+from src.models import HyperparameterTuner, ModelEvaluator, ModelSelector
+
+logger = logging.getLogger(__name__)
+
+
 class TrainingPipeline:
     """
     Training Pipeline to train (using hyperparameter tuning) and evaluate a model
     """
-    def __init__(self, config):
+
+    def __init__(self, config) -> None:
         """
         Initialize the Training Pipeline
         :param config: Configuration dictionary with all the necessary parameters
@@ -19,43 +27,55 @@ class TrainingPipeline:
         self.hpo_tuner = HyperparameterTuner(config=config)
         self.evaluator = ModelEvaluator()
 
-    def run(self):
+    def run(self) -> None:
         """
         Run the Training Pipeline. The training_pipeline will:
-        1. Load data
-        2. Perform Feature Engineering
-        3. Split Data
-        4. Build and Train Model
-        5. Evaluate Model
+        1. Load and pre-process data
+        2. Split Data into train and test split
+        3. Build a model
+        4. Perform training using hyperparameter optimisation
+        5. Evaluate the best model on the test set
+        6. Save Model
         """
         random_state = self.config["random_seed"]
 
         # Step 1 : Read and pre-process data
+        logger.info("Reading and Pre-processing Data")
         X, y = self.feature_engineer.read_and_prepare_data()
 
+        # Step 2: Split Data into train and test split.
 
-        # Step 3: Split Data
-        test_size = self.config['training']['test_size']
-        X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                            test_size=test_size,
-                                                            random_state=random_state)
+        # The train split will be split automatically for training and validation during the
+        # cross-validation
+        test_size = self.config["training"]["test_size"]
+        logger.info(f"Splitting data into train and test with test size: {test_size}")
+        x_train, x_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, random_state=random_state
+        )
 
+        # Step 3 : Build the model
+        logger.info("Building Model")
         model = self.model_factory_selector.get_model()
         specific_model = model.create_model()
 
-        # Step 4: Hyperparameter tuning
-        tuned_model = self.hpo_tuner.tune(specific_model, X_train, y_train)
+        # Step 4: Training with Hyperparameter optimisation.
+
+        logger.info(
+            "Training Model with Hyperparameter Optimisation. Note: This may take a while"
+        )
+        best_performance_model = self.hpo_tuner.tune(specific_model, x_train, y_train)
 
         # Step 5: Evaluate Model
-        evaluation_results = self.evaluator.evaluate(tuned_model, X_test, y_test)
-        print(f"Model Evaluation: {evaluation_results}")
+        logger.info("Evaluating Model on Test Set")
+        evaluation_results = self.evaluator.evaluate(
+            best_performance_model, x_test, y_test
+        )
+        logger.info(
+            f"Model Evaluation: {self.evaluator.results_to_pretty_string(evaluation_results)}"
+        )
 
         # Step 6: Save Model
         save_dir = self.config["models"]["destination"]
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
-        model.save_model(tuned_model, save_dir)
-
-
-
-
+        model.save_model(best_performance_model, save_dir)
