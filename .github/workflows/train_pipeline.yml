@@ -31,7 +31,7 @@ jobs:
       # Run tests
       - name: Run Tests
         run: |
-          pytest tests/
+          pytest tests/pipeline/
 
       # Build Docker image for training
       - name: Build Docker Image for Training
@@ -45,5 +45,5 @@ jobs:
       # Push Docker image to container registry
       - name: Push Docker Image
         run: |
-          docker tag trainingpipeline:latest dockerhubusername/trainingpipeline:latest
-          docker push dockerhubusername/trainingpipeline:latest
+          docker tag trainingpipeline:latest ${{ secrets.DOCKER_USERNAME }}/trainingpipeline:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/trainingpipeline:latest

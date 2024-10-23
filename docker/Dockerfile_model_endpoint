@@ -16,4 +16,4 @@ ENV PYTHONPATH=/app
 EXPOSE 5000
 
 # Run the inference service
-CMD ["python", "src/inference_endpoint/model_endpoint.py"]
+CMD ["python", "src/endpoints/model_endpoint.py"]

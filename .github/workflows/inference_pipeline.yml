@@ -31,7 +31,7 @@ jobs:
       # Run tests
       - name: Run Tests
         run: |
-          pytest tests/
+          pytest tests/endpoints/
 
       # Build Docker image for model endpoint
       - name: Build Docker Image for Model Endpoint
