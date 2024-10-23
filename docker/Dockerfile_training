@@ -1,0 +1,16 @@
+# Base image
+FROM python:3.10-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt --verbose
+
+# Copy the rest of the source code
+COPY . .
+
+ENV PYTHONPATH=/app
+# Run the training script
+CMD ["python", "src/scripts/train.py"]
