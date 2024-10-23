@@ -1,10 +1,5 @@
 # All dependncies are at least 2 versions or 2 months older (which might be more stable)
 
-# There are two groups of requirements:
-# 1.For the code to run (for anyone who wants to use the repo)
-# 2.For the contributors (for anyone who wants to contribute to the repo)
-
-# Base requirements
 numpy>=2.1.0
 pandas>=2.2.1
 scikit-learn>=1.5.0
@@ -13,9 +8,3 @@ xgboost>=2.1.0
 flask>= 3.0.2
 requests>=2.30.3
 pytest>=8.2.0
-# Contributors requirements -
-# If required, these can be moved to requirements-dev.txt
-pre-commit>=3.5
-flake8==7.1.*
-black>=24.1
-isort>=5.12
