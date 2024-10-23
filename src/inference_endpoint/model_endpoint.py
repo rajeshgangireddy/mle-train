@@ -7,13 +7,16 @@ from src.models import ModelSelector
 
 app = Flask(__name__)
 
+config_path="src/configs/config.yaml"
+model_save_dir = "demo_space/save_models/"
+
 # Load configuration
-with open('../configs/config.yaml', 'r') as config_file:
+with open(config_path, 'r') as config_file:
     config = yaml.safe_load(config_file)
 
 # Initialize components
 feature_engineer = FeatureEngineer(config=config)
-model_save_dir = "../../demo_space/save_models/"
+
 # read model _type from model_save_dir
 with open(os.path.join(model_save_dir, "model_type.txt"), "r") as f:
     model_type = f.read().strip()

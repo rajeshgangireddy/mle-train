@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt --verbose
 # Copy the rest of the source code
 COPY . .
 
+ENV PYTHONPATH=/app
 # Expose port for API service
 EXPOSE 5000
 

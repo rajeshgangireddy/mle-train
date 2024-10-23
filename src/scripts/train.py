@@ -20,6 +20,6 @@ def load_config(config_path: str) -> dict:
     return config
 
 if __name__ == "__main__":
-    pipeline_config = load_config("../configs/config.yaml")
+    pipeline_config = load_config("src/configs/config.yaml")
     pipeline = TrainingPipeline(pipeline_config)
     pipeline.run()

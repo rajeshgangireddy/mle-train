@@ -1,5 +1,5 @@
 data:
-  path: "../demo_space/data/datatraining.txt"
+  path: "demo_space/data/datatraining.txt"
   ignore_columns: []
   index_column: 0
 
@@ -13,7 +13,7 @@ feature_engineering:
 
 
 models:
-  destination: "../demo_space/save_models"
+  destination: "demo_space/save_models"
   type: "XGBClassifier"
   parameters:
     n_estimators: [10, 50, 100, 200]
