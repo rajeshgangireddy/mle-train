@@ -1,0 +1,53 @@
+info:
+  title: Model Predictions API
+  version: 1.0.0
+  description: API for making predictions using the trained model.
+servers:
+  - url: http://localhost:5000
+
+paths:
+  /predict:
+    post:
+      summary: Predict using the model
+      requestBody:
+        description: JSON object containing the input features for the prediction
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Temperature:
+                  type: number
+                  description: Temperature in Celsius
+                Humidity:
+                    type: number
+                    description: Humidity in percentage
+                Light:
+                    type: number
+                    description: Light (Not sure of units)
+                CO2:
+                    type: number
+                    description: CO2 (Not sure of units)
+                HumidityRatio:
+                    type: number
+                    description: Humidity ratio
+      responses:
+        '200':
+          description: A JSON array of predicted values
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: number
+        '400':
+          description: Error message if the request is malformed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
