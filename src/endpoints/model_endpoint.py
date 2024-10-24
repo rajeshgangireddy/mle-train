@@ -1,11 +1,13 @@
 import os
 
+from flasgger import Swagger, swag_from
 from flask import Flask, jsonify, request
 
 from src.models import ModelSelector
 from src.utils import data_to_features, read_config_file
 
 app = Flask(__name__)
+swagger = Swagger(app)
 
 # For demo, we will use the same configuration file and a fixed model save directory
 config_path = "src/configs/config.yaml"
@@ -25,10 +27,10 @@ model = model_loader.load_model(os.path.join(model_save_dir, "model.json"))
 
 
 @app.route("/predict", methods=["POST"])
+@swag_from("./swagger_config.yml")  # Reference the external swagger configuration
 def predict():
     """
     Endpoint to make predictions using the model.
-    :return: JSON with predictions or error message
     """
     try:
         # Get JSON data from request
