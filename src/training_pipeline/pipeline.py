@@ -1,10 +1,12 @@
 import logging
 import os
 
+import yaml
 from sklearn.model_selection import train_test_split
 
 from src.data_handler import FeatureEngineer
 from src.models import HyperparameterTuner, ModelEvaluator, ModelSelector
+from src.utils import timestamp_to_string
 
 logger = logging.getLogger(__name__)
 
@@ -74,8 +76,16 @@ class TrainingPipeline:
             f"Model Evaluation: {self.evaluator.results_to_pretty_string(evaluation_results)}"
         )
 
-        # Step 6: Save Model
-        save_dir = self.config["models"]["destination"]
+        # Step 6: Save Model and a copy of the config file
+        save_dir = os.path.join(
+            self.config["models"]["destination"], timestamp_to_string()
+        )
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         model.save_model(best_performance_model, save_dir)
+        logger.info(f"Model saved at: {save_dir}")
+
+        # save a copy of config file - Good to have this information for reproducibility
+        # or selecting a particular model in future
+        with open(os.path.join(save_dir, "config_used_for_training.yaml"), "w") as file:
+            yaml.dump(self.config, file)

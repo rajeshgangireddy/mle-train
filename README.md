@@ -15,7 +15,7 @@ the main requirements file.
 The `src/configs/config.yaml` is the configuration file that contains the parameters for the training pipeline.
 This also includes the path to the data file.
 Running `python src/scripts/train.py` will use the existing data, performs the training and saves the model in the
-`save_models' directory.
+`saved_models' directory.
 
 Any changes to data source, model parameters, model save path etc. can be made in the `config.yaml` file.
 
