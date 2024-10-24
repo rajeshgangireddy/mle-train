@@ -34,7 +34,7 @@ def read_config_file(config_path: str) -> dict:
     return config
 
 
-def timestamp_str() -> str:
+def timestamp_to_string() -> str:
     """
     Return a string with the current timestamp. Can be used for filenames or directory names
     :return: string with the current timestamp

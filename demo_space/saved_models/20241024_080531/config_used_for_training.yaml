@@ -1,0 +1,41 @@
+data:
+  ignore_columns: []
+  index_column: 0
+  path: demo_space/data/datatraining.txt
+feature_engineering:
+  categorical_features:
+  - Temperature
+  - Humidity
+  - Light
+  - CO2
+  - HumidityRatio
+  datetime_features:
+  - date
+  datetime_format: '%Y-%m-%d %H:%M:%S'
+  target: Occupancy
+models:
+  destination: demo_space/saved_models
+  parameters:
+    learning_rate:
+    - 0.01
+    - 0.1
+    - 0.3
+    max_depth:
+    - 3
+    - 5
+    - 7
+    - 9
+    n_estimators:
+    - 10
+    - 50
+    - 100
+    - 200
+  type: XGBClassifier
+random_seed: 42
+training:
+  hyperparameter_optimisation:
+    cv: 8
+    n_iter: 10
+    n_jobs: 2
+    scoring: roc_auc
+  test_size: 0.2
