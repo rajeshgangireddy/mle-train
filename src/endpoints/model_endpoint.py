@@ -7,14 +7,15 @@ from src.utils import data_to_features, read_config_file
 
 app = Flask(__name__)
 
-# For demo, we will use the same configuration file and model save directory
+# For demo, we will use the same configuration file and a fixed model save directory
 config_path = "src/configs/config.yaml"
-model_save_dir = "demo_space/save_models/"
+model_save_dir = "demo_space/saved_models/20241024_080540"
 
 # Load configuration
 config = read_config_file(config_path)
 categorical_features = config["feature_engineering"]["categorical_features"]
-# read model _type from model_save_dir
+
+# Read model type from model_save_dir
 with open(os.path.join(model_save_dir, "model_type.txt"), "r") as f:
     model_type = f.read().strip()
 
