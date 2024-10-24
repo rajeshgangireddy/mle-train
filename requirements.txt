@@ -1,5 +1,4 @@
 # All dependncies are at least 2 versions or 2 months older (which might be more stable)
-
 numpy>=2.1.0
 pandas>=2.2.1
 scikit-learn>=1.5.0
